@@ -99,6 +99,38 @@ resource "azurerm_linux_virtual_machine" "main" {
   admin_username                  = var.admin_username
   admin_password                  = var.admin_password
   disable_password_authentication = false
+  custom_data = base64encode(<<-EOF
+#!/bin/bash
+
+apt-get update -y
+
+apt-get install -y ca-certificates curl gnupg
+
+install -m 0755 -d /etc/apt/keyrings
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list
+
+apt-get update -y
+
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+systemctl enable docker
+
+systemctl start docker
+
+docker pull ${var.docker_image_name}
+
+docker stop cloudscale-webapp || true
+
+docker rm cloudscale-webapp || true
+
+docker run -d --name cloudscale-webapp --restart always -p 80:80 ${var.docker_image_name}
+EOF
+  )
 
   network_interface_ids = [
     azurerm_network_interface.main.id
