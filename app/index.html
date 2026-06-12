@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
         }
 
@@ -22,7 +22,7 @@
             padding: 40px;
             border-radius: 14px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-            width: 520px;
+            width: 620px;
         }
 
         h1 {
@@ -40,25 +40,55 @@
             line-height: 1.6;
         }
 
-        .name {
-            font-weight: bold;
+        .team {
+            margin-top: 25px;
+            text-align: left;
+            background: #f4f7fb;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .team h3 {
+            margin-top: 0;
             color: #0f62fe;
+            text-align: center;
+        }
+
+        .team ul {
+            margin: 0;
+            padding-left: 25px;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 16px;
+            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>CloudScale Web Application</h1>
-        <h2>Infrastructure as Code Project</h2>
+        <h2>Infrastructure as Code with Terraform and Azure</h2>
 
         <p>
-            This containerized web application was created by
-            <span class="name">Dief allah Ateeyah</span>.
+            This containerized web application was built using Docker,
+            Terraform, Azure Virtual Machine, and GitHub Actions CI/CD.
         </p>
 
-        <p>
-            The application is deployed using Docker, Terraform, Azure,
-            and GitHub Actions.
+        <div class="team">
+            <h3>Project Team Members</h3>
+            <ul>
+                <li>Dief allah Ateeyah - 4808</li>
+                <li>Ahmed Ben Ali - 4772</li>
+                <li>Ahmed Smew - 4743</li>
+            </ul>
+        </div>
+
+        <p class="footer">
+            Deployed automatically using Infrastructure as Code.
         </p>
     </div>
 </body>
