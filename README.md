@@ -1,806 +1,434 @@
-\[6/13/2026 2:41 AM] Dief Allah Sherif: # CloudScale Infrastructure as Code Project
-
-
-
-\## 1. Project Information
-
-
-
-Project Title: Infrastructure as Code with Terraform and Azure
-
-Course: Cloud Computing \& DevOps Engineering
-
-Project Scenario: CloudScale needs to deploy a containerized web application to Azure using Docker, Terraform, and GitHub Actions CI/CD.
-
-
-
-\## 2. Team Members
-
-
-
-| Name               | Student ID |
-
-| ------------------ | ---------- |
-
-| Dief allah Ateeyah | 4808       |
-
-| Ahmed Ben Ali      | 4772       |
-
-| Ahmed Smew         | 4743       |
-
-
-
-\## 3. Repository Link
-
-
-
-GitHub Repository:
-
-https://github.com/Diefallah6/Second-Project
-
-
-
-\## 4. Project Description
-
-
-
-This project deploys a containerized web application to Microsoft Azure using Infrastructure as Code.
-
-
-
-The web application was created using a simple HTML page and packaged into a Docker image. The Docker image was pushed to Docker Hub, then Terraform was used to create the Azure infrastructure. A Linux virtual machine was created and configured using a startup script to install Docker, pull the Docker image, and run the container automatically.
-
-
-
-GitHub Actions was used to automate Terraform commands. The workflow runs terraform plan on Pull Requests and runs terraform apply after changes are pushed to the main branch, with a manual approval gate for production deployment.
-
-
-
-\## 5. Architecture Diagram
-
-
-
-flowchart TD
-
-&#x20;   A\[Developer] --> B\[GitHub Repository]
-
-&#x20;   B --> C\[GitHub Actions CI/CD]
-
-&#x20;   C --> D\[Terraform]
-
-&#x20;   D --> E\[Azure Resource Group]
-
-&#x20;   E --> F\[Virtual Network]
-
-&#x20;   F --> G\[Subnet]
-
-&#x20;   G --> H\[Network Interface]
-
-&#x20;   H --> I\[Linux Virtual Machine]
-
-&#x20;   E --> J\[Public IP Address]
-
-&#x20;   E --> K\[Network Security Group]
-
-&#x20;   K --> I
-
-&#x20;   J --> I
-
-&#x20;   L\[Docker Hub Image] --> I
-
-&#x20;   I --> M\[Docker Container]
-
-&#x20;   M --> N\[CloudScale Web Application]
-
-
-
-
-
-\## 6. Technologies Used
-
-
-
-\* Docker
-
-\* Docker Hub
-
-\* Terraform
-
-\* Microsoft Azure
-
-\* GitHub Actions
-
-\* Linux Virtual Machine
-
-\* Nginx
-
-\* HTML/CSS
-
-
-
-\## 7. Docker Image Information
-
-
-
-Docker Hub account used:
-
-
-
-diefallah6
-
-
-
-
-
-Docker image name:
-
-
-
-diefallah6/cloudscale-webapp:v1
-
-
-
-
-
-The container exposes port 80.
-
-
-
-\## 8. Docker Build and Push Instructions
-
-
-
-\### 8.1 Build the Docker Image
-
-
-
+# ☁️ CloudScale Infrastructure as Code Project
+
+> **Infrastructure as Code with Terraform and Azure** — A cloud-native deployment automation solution
+
+---
+
+## 📋 Project Information
+
+| Attribute | Details |
+|-----------|---------|
+| **Title** | Infrastructure as Code with Terraform and Azure |
+| **Course** | Cloud Computing & DevOps Engineering |
+| **Scenario** | Deploy a containerized web application to Azure using Docker, Terraform, and GitHub Actions CI/CD |
+| **Repository** | [Diefallah6/Second-Project](https://github.com/Diefallah6/Second-Project) |
+
+---
+
+## 👥 Team Members
+
+| Name | Student ID |
+|------|-----------|
+| Dief allah Ateeyah | 4808 |
+| Ahmed Ben Ali | 4772 |
+| Ahmed Smew | 4743 |
+
+---
+
+## 🎯 Project Overview
+
+This project demonstrates a **complete Infrastructure as Code (IaC) solution** that deploys a containerized web application to Microsoft Azure. The architecture combines:
+
+- **Docker** for containerization
+- **Terraform** for infrastructure provisioning
+- **GitHub Actions** for CI/CD automation
+- **Azure** for cloud resources
+
+---
+
+## 🏗️ Architecture Diagram
+
+```mermaid
+graph TD
+    A["👨‍💻 Developer"] -->|git push| B["🔗 GitHub Repository"]
+    B -->|trigger| C["⚙️ GitHub Actions CI/CD"]
+    
+    C -->|terraform plan| D["🏗️ Terraform"]
+    D -->|provision| E["📦 Azure Resource Group"]
+    
+    E --> F["🌐 Virtual Network<br/>10.0.0.0/16"]
+    E --> J["📍 Public IP Address"]
+    E --> K["🔐 Network Security Group<br/>SSH:22 | HTTP:80"]
+    
+    F --> G["🔹 Subnet<br/>10.0.1.0/24"]
+    G --> H["🔌 Network Interface"]
+    H --> I["🖥️ Linux VM<br/>Ubuntu + Docker"]
+    
+    J --> I
+    K --> I
+    
+    L["🐳 Docker Hub<br/>diefallah6/cloudscale-webapp:v1"] -->|pull| I
+    
+    I --> M["📦 Docker Container"]
+    M --> N["🌐 CloudScale Web App<br/>Nginx on Port 80"]
+    
+    style A fill:#FF6B6B
+    style B fill:#4ECDC4
+    style C fill:#45B7D1
+    style D fill:#FFA07A
+    style E fill:#98D8C8
+    style N fill:#6C5CE7
+```
+
+---
+
+## 🛠️ Technologies & Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Containerization** | Docker, Docker Hub |
+| **Infrastructure** | Terraform, Microsoft Azure |
+| **CI/CD** | GitHub Actions |
+| **Compute** | Linux VM (Ubuntu), Nginx |
+| **Networking** | Virtual Network, Subnet, NSG, Public IP |
+| **Frontend** | HTML/CSS |
+
+---
+
+## 🐳 Docker Configuration
+
+### Docker Image Details
+
+```
+Repository: diefallah6
+Image Name: diefallah6/cloudscale-webapp:v1
+Exposed Port: 80
+Web Server: Nginx (Alpine)
+```
+
+### Dockerfile
+
+```dockerfile
+FROM nginx:alpine
+COPY app/index.html /usr/share/nginx/html/index.html
+EXPOSE 80
+```
+
+### Build & Push Instructions
+
+```bash
+# Build the Docker image
 docker build -t diefallah6/cloudscale-webapp:v1 .
 
-
-
-
-
-This command builds a Docker image from the Dockerfile in the project folder.
-
-
-
-\### 8.2 Login to Docker Hub
-
-
-
+# Login to Docker Hub
 docker login
 
-
-
-
-
-This command logs in to Docker Hub.
-
-
-
-\### 8.3 Push the Docker Image
-
-
-
+# Push the image
 docker push diefallah6/cloudscale-webapp:v1
+```
 
+---
 
+## 🏛️ Terraform Infrastructure
 
+### Azure Resources Provisioned
 
+```mermaid
+graph LR
+    A["Azure Resources"] -->|Resource Group| B["tfstate-rg-diefallah"]
+    B -->|Virtual Network| C["10.0.0.0/16"]
+    C -->|Subnet| D["10.0.1.0/24"]
+    B -->|Public IP| E["Static IP"]
+    B -->|NSG| F["Security Rules"]
+    B -->|Network Interface| G["NIC"]
+    D --> G
+    G -->|connects to| H["Linux VM<br/>Standard_D2s_v3"]
+    E --> H
+    F --> H
+    H -->|runs| I["Docker Container"]
+    
+    style B fill:#E8F5E9
+    style H fill:#FFF3E0
+```
 
-This command uploads the Docker image to Docker Hub.
+### Resource Configuration Table
 
+| Resource | Configuration | Details |
+|----------|---------------|---------|
+| **Resource Group** | `tfstate-rg-diefallah` | Primary container for all resources |
+| **Virtual Network** | `10.0.0.0/16` | Network address space |
+| **Subnet** | `10.0.1.0/24` | Subnet prefix |
+| **VM Size** | `Standard_D2s_v3` | *Changed from Standard_B1s due to capacity constraints* |
+| **Region** | `switzerlandnorth` | Deployment region |
+| **OS** | Ubuntu Linux | OS Disk attached |
+| **Public IP** | Static | For external access |
 
+### Important Configuration Notes
 
-\## 9. Terraform Infrastructure
+> ⚠️ **VM Size Note:** The handout specified `Standard_B1s`, but Azure capacity restrictions in the selected region required changing to `Standard_D2s_v3`.
 
+> ℹ️ **Provider Configuration:** `resource_provider_registrations = "none"` is used to prevent automatic registration errors.
 
+---
 
-Terraform was used to create the following Azure resources:
+## ⚡ Terraform Setup & Deployment
 
+### Initialize Terraform
 
-
-| Azure Resource         | Description                                 |
-
-| ---------------------- | ------------------------------------------- |
-
-| Resource Group         | Contains all project resources              |
-
-| Virtual Network        | Network address space 10.0.0.0/16         |
-
-| Subnet                 | Subnet address prefix 10.0.1.0/24         |
-
-| Public IP              | Static public IP address                    |
-
-| Network Security Group | Allows SSH port 22 and HTTP port 80         |
-
-| Network Interface      | Connects the VM to the subnet and public IP |
-
-| Linux Virtual Machine  | Runs Ubuntu and Docker                      |
-
-| OS Disk                | Disk attached to the VM                     |
-
-
-
-\## 10. Important Terraform Notes
-
-
-
-The required VM size in the project handout was:
-
-
-
-Standard\_B1s
-
-
-
-
-
-However, Azure showed a capacity restriction in the selected region. Because of this, the VM size was changed to:
-
-
-
-Standard\_D2s\_v3
-
-
-
-
-
-The selected Azure region was:
-
-
-
-switzerlandnorth
-
-
-
-
-
-The Terraform provider was configured with:
-
-
-
-resource\_provider\_registrations = "none"
-
-
-
-
-
-This was used to avoid automatic registration errors for Azure resource providers during Terraform execution.
-
-
-
-\## 11. Terraform Setup Instructions
-
-
-
-\### 11.1 Go to the Terraform Folder
-
-
-
+```bash
 cd terraform
 
-
-
-
-
-\### 11.2 Initialize Terraform
-
-
-
+# Initialize Terraform
 terraform init
 
-
-
-
-
-This command initializes Terraform and downloads the required Azure provider.
-
-
-
-\### 11.3 Validate Terraform Files
-
-
-
+# Validate configuration
 terraform validate
+```
 
+### Plan Infrastructure
 
+```bash
+terraform plan -input=false -var="admin_password=CloudScale@2026Pass"
+```
 
+### Deploy Infrastructure
 
+```bash
+terraform apply -auto-approve -input=false -var="admin_password=CloudScale@2026Pass"
+```
 
-This comman
+### Terraform File Structure
 
-\[6/13/2026 2:41 AM] Dief Allah Sherif: d checks that the Terraform configuration is valid.
+```
+terraform/
+├── providers.tf      # Azure provider configuration
+├── variables.tf      # Input variables
+├── main.tf          # Resource definitions
+└── outputs.tf       # Output values
+```
 
+---
 
+## 🐋 VM Docker Startup Script
 
-\### 11.4 Run Terraform Plan
+The Azure VM executes an automatic startup script that:
 
+1. ✅ Updates Ubuntu package manager
+2. ✅ Installs Docker runtime
+3. ✅ Enables Docker auto-start
+4. ✅ Pulls Docker image from Docker Hub
+5. ✅ Runs container with auto-restart policy
 
+### Docker Run Command
 
-terraform plan -input=false -var="admin\_password=CloudScale@2026Pass"
+```bash
+docker run -d \
+  --name cloudscale-webapp \
+  --restart always \
+  -p 80:80 \
+  diefallah6/cloudscale-webapp:v1
+```
 
+---
 
+## 🚀 GitHub Actions CI/CD Pipeline
 
+### Workflow Architecture
 
+```mermaid
+graph TD
+    A["Code Push"] -->|to main| B["GitHub Actions Trigger"]
+    
+    B -->|pull request| C["Plan Job"]
+    B -->|merge to main| D["Apply Job"]
+    
+    C -->|terraform init| C1["Initialize"]
+    C -->|terraform validate| C2["Validate"]
+    C -->|terraform plan| C3["Plan"]
+    C1 --> C2
+    C2 --> C3
+    C3 -->|result| C4["📋 Plan Report on PR"]
+    
+    D -->|terraform init| D1["Initialize"]
+    D -->|terraform apply| D2["Apply"]
+    D1 --> D2
+    D2 -->|awaits approval| D3["🔒 Manual Approval Gate"]
+    D3 -->|approved| D4["✅ Deploy to Azure"]
+    
+    style C fill:#C8E6C9
+    style D fill:#FFCCBC
+    style D3 fill:#FFB74D
+    style D4 fill:#A1887F
+```
 
-This command shows the resources Terraform will create before applying changes.
+### Workflow File Location
 
-
-
-\### 11.5 Run Terraform Apply
-
-
-
-terraform apply -auto-approve -input=false -var="admin\_password=CloudScale@2026Pass"
-
-
-
-
-
-This command creates the Azure resources.
-
-
-
-\## 12. VM Docker Startup Script
-
-
-
-The Azure VM uses a custom startup script in Terraform.
-
-
-
-The script performs the following tasks:
-
-
-
-1\. Updates the Ubuntu package list.
-
-2\. Installs Docker.
-
-3\. Enables Docker to start automatically.
-
-4\. Pulls the Docker image from Docker Hub.
-
-5\. Runs the container on port 80.
-
-6\. Uses --restart always so the container starts again if the VM reboots.
-
-
-
-Docker run command used inside the VM:
-
-
-
-docker run -d --name cloudscale-webapp --restart always -p 80:80 diefallah6/cloudscale-webapp:v1
-
-
-
-
-
-\## 13. GitHub Actions Workflow Explanation
-
-
-
-The GitHub Actions workflow is located at:
-
-
-
+```
 .github/workflows/terraform.yml
+```
 
+### Workflow Jobs
 
+| Job | Trigger | Actions |
+|-----|---------|---------|
+| **Terraform Plan** | Pull Request to main | `terraform init` → `validate` → `plan` |
+| **Terraform Apply** | Merge to main | `terraform init` → `apply` (with approval) |
 
+### GitHub Secrets Configuration
 
+| Secret Name | Purpose | Location |
+|------------|---------|----------|
+| `AZURE_CREDENTIALS` | Azure authentication | Settings → Secrets → Actions |
+| `TF_ADMIN_PASSWORD` | VM admin password | Settings → Secrets → Actions |
 
-The workflow has two main jobs:
+### Manual Approval Gate
 
+The production environment requires manual approval before deployment:
 
-
-\### 13.1 Terraform Plan
-
-
-
-This job runs on every Pull Request to the main branch.
-
-
-
-It performs:
-
-
-
-terraform init
-
-terraform validate
-
-terraform plan
-
-
-
-
-
-\### 13.2 Terraform Apply
-
-
-
-This job runs after changes are pushed to the main branch.
-
-
-
-It performs:
-
-
-
-terraform init
-
-terraform apply
-
-
-
-
-
-The apply job uses the GitHub environment:
-
-
-
-production
-
-
-
-
-
-This environment requires manual approval before deployment.
-
-
-
-\## 14. GitHub Secrets
-
-
-
-The workflow uses GitHub Secrets for sensitive information.
-
-
-
-| Secret Name       | Purpose                               |
-
-| ----------------- | ------------------------------------- |
-
-| AZURE\_CREDENTIALS | Azure authentication credentials      |
-
-| TF\_ADMIN\_PASSWORD | Admin password for the Azure Linux VM |
-
-
-
-The secrets are stored in:
-
-
-
-GitHub Repository → Settings → Secrets and variables → Actions
-
-
-
-
-
-\## 15. Manual Approval Gate
-
-
-
-A GitHub Environment named production was created.
-
-
-
-The Terraform Apply job uses:
-
-
-
+```yaml
 environment:
+  name: production
+  reviewers:
+    - required-reviewer
+```
 
-&#x20; name: production
+---
 
+## 📝 Step-by-Step Implementation Guide
 
-
-
-
-This means the apply job waits for manual approval before it deploys to Azure.
-
-
-
-\## 16. Step-by-Step Detailed Solution
-
-
-
-\### Step 1: Clone the Repository
-
-
-
+### 1️⃣ Clone Repository
+```bash
 git clone https://github.com/Diefallah6/Second-Project.git
-
 cd Second-Project
+```
 
+### 2️⃣ Create Web Application
+```
+app/index.html  # Simple HTML page with team info
+```
 
-
-
-
-\### Step 2: Create the Web Application
-
-
-
-A simple HTML web application was created inside:
-
-
-
-app/index.html
-
-
-
-
-
-The page displays the project title and the team members.
-
-
-
-\### Step 3: Create Dockerfile
-
-
-
-A Dockerfile was created to run the application using Nginx.
-
-
-
-FROM nginx:alpine
-
-
-
-COPY app/index.html /usr/share/nginx/html/index.html
-
-
-
-EXPOSE 80
-
-
-
-
-
-\### Step 4: Build Docker Image
-
-
-
+### 3️⃣ Containerize Application
+```bash
 docker build -t diefallah6/cloudscale-webapp:v1 .
-
-
-
-
-
-\### Step 5: Push Docker Image to Docker Hub
-
-
-
 docker push diefallah6/cloudscale-webapp:v1
+```
 
-
-
-
-
-\### Step 6: Create Terraform Files
-
-
-
-The following Terraform files were created:
-
-
-
-terraform/providers.tf
-
-terraform/variables.tf
-
-terraform/main.tf
-
-terraform/outputs.tf
-
-
-
-
-
-\### Step 7: Create Azure Backend for Terraform State
-
-
-
-The Terraform remote backend was created using Azure Storage.
-
-
-
-az group create --name tfstate-rg-diefallah --location switzerlandnorth
-
-
-
-
-
-az storage account create --name tfstate4808diefallah --resource-group tfstate-rg-diefallah --location switzerlandnorth --sku Standard\_LRS
-
-
-
-
-
-az storage container create --name tfstate --account-name tfstate4808diefallah --auth-mode login
-
-
-
-
-
-\### Step 8: Run Terraform Plan
-
-
-
+### 4️⃣ Create Terraform Infrastructure
+```bash
 cd terraform
-
 terraform init
-
 terraform validate
+terraform plan -var="admin_password=CloudScale@2026Pass"
+```
+
+### 5️⃣ Deploy with Terraform
+```bash
+terraform apply -auto-approve -var="admin_password=CloudScale@2026Pass"
+```
+
+### 6️⃣ Configure GitHub Secrets
+- Navigate to: **Settings → Secrets and variables → Actions**
+- Add `AZURE_CREDENTIALS` and `TF_ADMIN_PASSWORD`
+
+### 7️⃣ Create GitHub Environment
+- Create `production` environment
+- Enable required reviewers for manual approval
+
+### 8️⃣ Access Application
+```
+http://<public-ip-address>
+```
 
-terraform plan -input=false -var="admin\_password=CloudScale@2026Pass"
+---
 
+## 📦 Azure Backend Setup
 
+Terraform state management:
 
+```bash
+# Create resource group
+az group create \
+  --name tfstate-rg-diefallah \
+  --location switzerlandnorth
 
+# Create storage account
+az storage account create \
+  --name tfstate4808diefallah \
+  --resource-group tfstate-rg-diefallah \
+  --location switzerlandnorth \
+  --sku Standard_LRS
 
-\### Step 9: Run Terraform Apply
+# Create storage container
+az storage container create \
+  --name tfstate \
+  --account-name tfstate4808diefallah \
+  --auth-mode login
+```
 
+---
 
+## 📸 Project Documentation
 
-terraform apply -auto-approve -input=false -var="admin\_password=CloudScale@2026Pass"
+### Screenshots
 
+| Screenshot | Description |
+|-----------|-------------|
+| `01-docker-build.png` | ✅ Docker image build successful |
+| `02-docker-push.png` | ✅ Docker image pushed to Docker Hub |
+| `03-terraform-plan.png` | 📋 Terraform plan output |
+| `04-terraform-apply.png` | ✅ Terraform apply output |
+| `05-github-actions-plan-pr.png` | 🔍 GitHub Actions plan on PR |
+| `06-github-actions-approved-apply.png` | ✅ GitHub Actions approved apply |
+| `07-web-app-browser.png` | 🌐 Containerized web app in browser |
+| `08-azure-resources.png` | 📊 Azure Portal resource group view |
 
+---
 
+## 👨‍💼 Git Contribution Summary
 
+```mermaid
+gitGraph commit id: "Initial Setup"
+commit id: "add dockerized web application" tag: "Dief allah"
+commit id: "update web page with team info" tag: "Dief allah"
+commit id: "add terraform azure files" tag: "Ahmed Ben Ali"
+commit id: "add vm docker startup config" tag: "Ahmed Ben Ali"
+commit id: "add github actions workflow" tag: "Ahmed Smew"
+commit id: "add terraform updates" tag: "Ahmed Smew"
+```
 
-\### Step 10: Open the Web Application
+| Commit | Contributor |
+|--------|------------|
+| Add dockerized web application | Dief allah Ateeyah |
+| Update web page with team information | Dief allah Ateeyah |
+| Add Terraform Azure infrastructure files | Ahmed Ben Ali |
+| Add VM Docker startup configuration | Ahmed Ben Ali |
+| Add GitHub Actions Terraform workflow | Ahmed Smew |
+| Add final Terraform updates for GitHub Actions | Ahmed Smew |
 
+---
 
+## ✅ Final Result
 
-After Terraform finished, the public IP was used to open the web application in the browser:
+A **fully automated, cloud-native deployment pipeline** featuring:
 
+- ✨ **Containerized Application** — Dockerized web app ready for production
+- 🔧 **Infrastructure as Code** — Complete Azure infrastructure defined in Terraform
+- 🤖 **CI/CD Automation** — GitHub Actions handles planning and deployment
+- 🔐 **Security** — Manual approval gates, GitHub secrets, NSG rules
+- 📊 **Monitoring Ready** — Scalable infrastructure on Azure
+- 🌐 **Public Access** — Application accessible via static public IP
 
+### Access the Application
 
-http://20.199.179.236
+```
+🌍 Application URL: http://<public-ip-address>
+```
 
+---
 
+## 📚 Resources
 
+- [Terraform Azure Provider Documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Docker Documentation](https://docs.docker.com/)
+- [Azure Documentation](https://docs.microsoft.com/en-us/azure/)
 
+---
 
-\### Step 11: Configure GitHub Secrets
+<div align="center">
 
+**Made with ❤️ by CloudScale Team**
 
+[![GitHub](https://img.shields.io/badge/GitHub-Diefallah6%2FSecond--Project-blue?style=for-the-badge&logo=github)](https://github.com/Diefallah6/Second-Project)
 
-The following secrets were added to GitHub:
-
-
-
-AZURE\_CREDENTIALS
-
-TF\_ADMIN\_PASSWORD
-
-
-
-
-
-\### Step 12: Configure GitHub Manual Approval
-
-
-
-A GitHub Environment named production was created, and required reviewers were enabled for manual approval
-
-\[6/13/2026 2:41 AM] Dief Allah Sherif: .
-
-
-
-\### Step 13: Run GitHub Actions on Pull Request
-
-
-
-A Pull Request was created. GitHub Actions ran Terraform Plan successfully.
-
-
-
-\### Step 14: Run GitHub Actions Apply
-
-
-
-After merging to the main branch, the workflow waited for manual approval and then ran Terraform Apply.
-
-
-
-\## 17. Screenshots
-
-
-
-\### Screenshot 1: Docker image build successful
-
-
-
-!\[Docker image build successful](screenshots/01-docker-build.png)
-
-
-
-\### Screenshot 2: Docker image pushed to Docker Hub
-
-
-
-!\[Docker image pushed to Docker Hub](screenshots/02-docker-push.png)
-
-
-
-\### Screenshot 3: Terraform plan output
-
-
-
-!\[Terraform plan output](screenshots/03-terraform-plan.png)
-
-
-
-\### Screenshot 4: Terraform apply output
-
-
-
-!\[Terraform apply output](screenshots/04-terraform-apply.png)
-
-
-
-\### Screenshot 5: GitHub Actions workflow showing successful plan on PR
-
-
-
-!\[GitHub Actions plan on PR](screenshots/05-github-actions-plan-pr.png)
-
-
-
-\### Screenshot 6: GitHub Actions workflow showing approved apply
-
-
-
-!\[GitHub Actions approved apply](screenshots/06-github-actions-approved-apply.png)
-
-
-
-\### Screenshot 7: Browser showing containerized web app
-
-
-
-!\[Browser showing web app](screenshots/07-web-app-browser.png)
-
-
-
-\### Screenshot 8: Azure Portal showing resource group and resources
-
-
-
-!\[Azure Portal resources](screenshots/08-azure-resources.png)
-
-
-
-\## 18. Git Commit Contribution Summary
-
-
-
-| Commit Message                                 | Team Member        |
-
-| ---------------------------------------------- | ------------------ |
-
-| add dockerized web application                 | Dief allah Ateeyah |
-
-| update web page with team information          | Dief allah Ateeyah |
-
-| add terraform azure infrastructure files       | Ahmed Ben Ali      |
-
-| add vm docker startup configuration            | Ahmed Ben Ali      |
-
-| add github actions terraform workflow          | Ahmed Smew         |
-
-| add final terraform updates for github actions | Ahmed Smew         |
-
-
-
-\## 19. Final Result
-
-
-
-The final result is a containerized web application deployed on an Azure Linux VM using Terraform. The application is accessible through the public IP address, and the deployment process is automated using GitHub Actions with a manual approval gate for production.
-
+</div>
